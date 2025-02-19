@@ -28,7 +28,7 @@ app.post('/media', async (req, res) => {
 })
 
 // Fetch s3 urls for media
-app.get('/media', async (req, res) => {
+app.post('/fetchmedia', async (req, res) => {
     await mediaManager.fetchMedia(req, res);
 })
 
