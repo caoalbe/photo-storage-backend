@@ -13,4 +13,13 @@ export class TagManager {
             console.log(err);
         }
     }
+
+    async getFileTags(req, res) {
+        try {
+            const fileTags = await tagService.getFileTags(req.query.filename)
+            res.status(201).json(fileTags)
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }

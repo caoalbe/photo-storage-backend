@@ -32,6 +32,11 @@ app.post('/fetchmedia', async (req, res) => {
     await mediaManager.fetchMedia(req, res);
 })
 
+// Fetch tags of file
+app.get('/fileTags', async (req, res) => {
+    await tagManager.getFileTags(req, res)
+})
+
 app.get('/', (req, res) => {res.send('hello world!'); console.log('root pinged')})
 
 app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));

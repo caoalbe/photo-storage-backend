@@ -38,4 +38,17 @@ export class TagService {
 
         return tags.length
     }
+
+    /**
+     * Retrieves all the tags associated with a single filename
+     */
+    async getFileTags(filename) {
+        const tagList = await db('tag as t')
+            .select('t.name')
+            .join('media_tag_assignment as mt', 't.id', 'mt.tag_id')
+            .join('media as m', 'm.id', 'mt.media_id')
+            .where('m.filename', filename);
+
+        return tagList.map(tag => tag.name)
+    }
 }
