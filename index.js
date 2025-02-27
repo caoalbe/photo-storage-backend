@@ -32,4 +32,6 @@ app.post('/fetchmedia', async (req, res) => {
     await mediaManager.fetchMedia(req, res);
 })
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.get('/', (req, res) => {res.send('hello world!'); console.log('root pinged')})
+
+app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
