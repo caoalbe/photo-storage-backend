@@ -9,6 +9,7 @@ export class TagManager {
      * Return Example: ["tag1", "tag2", "tag3"]
      */
     async assignTag(req, res) {
+        await tagService.createTag(req.body)
         const assignedTags = await tagService.assignTag(req.body);
         return {
             "assignedTags": assignedTags
