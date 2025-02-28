@@ -7,7 +7,7 @@ export class MediaManager {
     async createMedia(req, res) {
         try {
             const id = await mediaService.createMedia(req.body);
-            res.status(201).json(id);
+            // res.status(201).json(id);
         } catch (err) {
             console.log(err);
         }
