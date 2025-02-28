@@ -23,25 +23,47 @@ app.get('/s3Url', async (req, res) => {
 
 // Upload media metadata
 app.post('/media', async (req, res) => {
-    await mediaManager.createMedia(req, res);
-    await tagManager.createTag(req, res);
+    try {
+        const output = await mediaManager.media(req, res)
+        res.status(201).json(output)
+    } catch (error) {
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
+    }
 })
 
 // Fetch s3 urls for media
 app.post('/fetchmedia', async (req, res) => {
-    await mediaManager.fetchMedia(req, res);
+    try {
+        const output = await mediaManager.fetchMedia(req, res);
+        res.status(201).json(output);
+    } catch (error) {
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
+    }
 })
 
 // Fetch tags of file
 app.get('/fileTags', async (req, res) => {
-    await tagManager.getFileTags(req, res)
+    try {
+        const output = await tagManager.getFileTags(req, res);
+        res.status(201).json(output);
+    } catch (error) {
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
+    }
 })
 
 // Add tags to an existing media
 app.post('/tagMedia', async (req, res) => {
-    await tagManager.createTag(req, res)
+    try {
+        const output = await tagManager.assignTag(req, res)
+        res.status(201).json(output);
+    } catch (error) {
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
+    }
 })
 
-app.get('/', (req, res) => {res.send('hello world!'); console.log('root pinged')})
+app.get('/', (req, res) => {
+    res.send('Hello World!'); 
+    console.log('Root Pinged')
+})
 
 app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));

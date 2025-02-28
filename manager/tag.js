@@ -4,22 +4,32 @@ import { TagService } from "../service/tag.js";
 const tagService = new TagService();
 
 export class TagManager {
-    async createTag(req, res) {
-        try {
-            const tagsAdded = await tagService.createTag(req.body);
-            await tagService.assignTag(req.body);
-            res.status(201).json(tagsAdded);
-        } catch (err) {
-            console.log(err);
+    /**
+     * Route: /tagMedia
+     * Return Example: ["tag1", "tag2", "tag3"]
+     */
+    async assignTag(req, res) {
+        const assignedTags = await tagService.assignTag(req.body);
+        return {
+            "assignedTags": assignedTags
         }
     }
 
+    /**
+     * Route: /fileTags
+     * Return Example: ['tag1', 'tag2', 'tag3']
+     */
     async getFileTags(req, res) {
-        try {
-            const fileTags = await tagService.getFileTags(req.query.filename)
-            res.status(201).json(fileTags)
-        } catch (err) {
-            console.log(err);
-        }
+        const fileTags = await tagService.getFileTags(req.query.filename)
+        return fileTags;
+    }
+
+    /**
+     * Route: /tagMedia
+     * Return Example: ["tag1", "tag2", "tag3"]
+     */
+    async tagMedia(req, res) {
+        await tagService.createTag(req.body)
+        await tagService.assignTag(req.body)
     }
 }
