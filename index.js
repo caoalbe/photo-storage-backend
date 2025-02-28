@@ -37,6 +37,11 @@ app.get('/fileTags', async (req, res) => {
     await tagManager.getFileTags(req, res)
 })
 
+// Add tags to an existing media
+app.post('/tagMedia', async (req, res) => {
+    await tagManager.createTag(req, res)
+})
+
 app.get('/', (req, res) => {res.send('hello world!'); console.log('root pinged')})
 
 app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));

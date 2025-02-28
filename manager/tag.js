@@ -8,7 +8,7 @@ export class TagManager {
         try {
             const tagsAdded = await tagService.createTag(req.body);
             await tagService.assignTag(req.body);
-            // res.status(201).json(tagsAdded);
+            res.status(201).json(tagsAdded);
         } catch (err) {
             console.log(err);
         }
