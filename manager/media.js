@@ -28,15 +28,6 @@ export class MediaManager {
         }
     }
 
-    async createMedia(req, res) {
-        try {
-            const id = await mediaService.createMedia(req.body);
-            res.append('MediaCreated', id)
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     /**
      * Route: /fetchMedia
      * Return Example: ['file1', 'file2', 'file3']

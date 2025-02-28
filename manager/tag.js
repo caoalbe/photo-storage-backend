@@ -31,6 +31,7 @@ export class TagManager {
      */
     async tagMedia(req, res) {
         await tagService.createTag(req.body)
-        await tagService.assignTag(req.body)
+        const assignedTags = await tagService.assignTag(req.body)
+        return assignedTags;
     }
 }
