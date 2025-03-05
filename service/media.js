@@ -1,13 +1,10 @@
 import dotenv from 'dotenv'
 import { db } from "../database/dynamoDbClient.js"
-import { QueryCommand, PutItemCommand } from "@aws-sdk/client-dynamodb"
+import { QueryCommand } from "@aws-sdk/client-dynamodb"
 
 dotenv.config()
 
 export class MediaService {
-    /**
-     * Retrieves all the files which satisfy the given list of tags
-     */
     async fetchMedia(tagData) {
         try {
             const { tags } = tagData;
@@ -25,9 +22,6 @@ export class MediaService {
         }
     }
 
-    /**
-     * Given a single tag; retrieve all the files which have that tag
-     */
     async mediaByTag(tag) {
         try {
             const params = {
