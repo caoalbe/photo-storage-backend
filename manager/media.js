@@ -11,20 +11,10 @@ export class MediaManager {
      * Return Example: { "filename": "newfile", "createdTagCount": 1, "assignmentCount": 2 }
      */
     async media(req, res) {
-        // Add entry to <media> table
-        const fileName = await mediaService.createMedia(req.body)
-
-        // Add tags to <tag> table
-        // (only add tags that don't already exist)
-        const createdTagCount = await tagService.createTag(req.body)
-
-        // Add many-to-many connection(s) to <media_tag_assignment>
-        const assignmentCount = await tagService.assignTag(req.body)
+        const filename = await tagService.assignTagBatch(req.body)
 
         return {
-            "filename": fileName,
-            "createdTagCount": createdTagCount,
-            "assignmentCount": assignmentCount
+            "filename": filename
         }
     }
 
