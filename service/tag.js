@@ -26,13 +26,12 @@ export class TagService {
 
 
         } catch (error) {
-            console.log(error)
+            throw new Error(error.message)
         }
     }
 
     async getFileTags(filename) {       
         try {
-            console.log(`SELECTING: <${filename}>`)
             const params = {
                 TableName: process.env.AWS_DYNAMO_DB_TABLE,
                 KeyConditionExpression: "filename = :filename",
