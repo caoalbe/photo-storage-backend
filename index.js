@@ -21,17 +21,7 @@ app.get('/s3Url', async (req, res) => {
     await generateUploadURL(req, res)
 })
 
-// Upload media metadata
-app.post('/media', async (req, res) => {
-    try {
-        const output = await mediaManager.media(req, res)
-        res.status(201).json(output)
-    } catch (error) {
-        res.status(500).json({ error: error.message || 'Internal Server Error' });
-    }
-})
-
-// Fetch s3 urls for media
+// Read many filenames which satisfy many tags
 app.post('/fetchmedia', async (req, res) => {
     try {
         const output = await mediaManager.fetchMedia(req, res);
@@ -41,7 +31,7 @@ app.post('/fetchmedia', async (req, res) => {
     }
 })
 
-// Fetch tags of file
+// Read many tags of single file
 app.get('/fileTags', async (req, res) => {
     try {
         const output = await tagManager.getFileTags(req, res);
@@ -51,11 +41,11 @@ app.get('/fileTags', async (req, res) => {
     }
 })
 
-// Add tags to an existing media
-app.post('/tagMedia', async (req, res) => {
+// Create media with many tags
+app.post('/media', async (req, res) => {
     try {
-        const output = await tagManager.assignTag(req, res)
-        res.status(201).json(output);
+        const output = await mediaManager.media(req, res)
+        res.status(201).json(output)
     } catch (error) {
         res.status(500).json({ error: error.message || 'Internal Server Error' });
     }

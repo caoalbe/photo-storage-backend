@@ -5,19 +5,9 @@ const tagService = new TagService();
 
 export class TagManager {
     /**
-     * Route: /tagMedia
-     * Return Example: ["tag1", "tag2", "tag3"]
-     */
-    async assignTag(req, res) {
-        await tagService.createTag(req.body)
-        const assignedTags = await tagService.assignTag(req.body);
-        return {
-            "assignedTags": assignedTags
-        }
-    }
-
-    /**
      * Route: /fileTags
+     * Input Examples: 'filename1'
+     * Description: Reads table for all tags associated with with 'filename1'
      * Return Example: ['tag1', 'tag2', 'tag3']
      */
     async getFileTags(req, res) {
@@ -25,13 +15,4 @@ export class TagManager {
         return fileTags;
     }
 
-    /**
-     * Route: /tagMedia
-     * Return Example: ["tag1", "tag2", "tag3"]
-     */
-    async tagMedia(req, res) {
-        await tagService.createTag(req.body)
-        const assignedTags = await tagService.assignTag(req.body)
-        return assignedTags;
-    }
 }

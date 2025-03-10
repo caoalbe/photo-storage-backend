@@ -4,8 +4,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "npx knex migrate:latest --knexfile ./database/knexfile.js",
-    "statusMigrate": "npx knex migrate:status --knexfile ./database/knexfile.js",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -13,14 +11,14 @@
   "description": "",
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.758.0",
     "@aws-sdk/client-s3": "^3.743.0",
     "@aws-sdk/s3-request-presigner": "^3.743.0",
+    "@aws-sdk/types": "^3.734.0",
     "aws-sdk": "^2.1692.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "knex": "^3.1.0",
-    "pg": "^8.13.1"
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

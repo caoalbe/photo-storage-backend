@@ -1,72 +1,48 @@
-import { db } from "../database/db.js"
+import dotenv from 'dotenv'
+import { db } from "../database/dynamoDbClient.js"
+import { QueryCommand, PutItemCommand } from "@aws-sdk/client-dynamodb"
+
+dotenv.config()
 
 export class TagService {
-    /**
-     * Only creates tags which don't exist yet.
-     */
-    async createTag(tagData) {
-        try {
-            const { tags } = tagData;
-
-            // fetch existing tags in db
-            const existingTags = await db('tag').whereIn("name", tags).pluck("name");
-
-            // filter out existing tags
-            const tagsToAdd = tags.filter(tag => !existingTags.includes(tag))
-
-            // insert only new tags
-            if (tagsToAdd.length > 0) {
-                await db('tag').insert(tagsToAdd.map(name => ({name})))
-            }
-
-            return tagsToAdd;
-        } catch (error) {
-            if (error.message.includes("duplicate key value violates unique constraint")) {
-                throw new Error("Tag already exists")
-            } else {
-                throw new Error(error.message)
-            }
-        }
-    }
-
-    /**
-     * Assumes file and all tags exist in db already
-     */
-    async assignTag(tagData) {
+    async assignTagBatch(tagData) {
         try {
             const { filename, tags } = tagData;
-            
-            // find id of file
-            const { id: file_id } = await db('media').select('id').where("filename", filename).first();
 
-            // find id of each tag
-            const tag_ids = await db('tag').select('id').whereIn("name", tags);
+            for (let t = 0; t < tags.length; t++) {
+                // insert <filename, tags[t]> into db
+                const params = {
+                    TableName: process.env.AWS_DYNAMO_DB_TABLE,
+                    Item: {
+                        filename: { S: filename },
+                        tag: { S: tags[t] }
+                    }
+                }
 
-            // insert a mapping bettween the file and each tag
-            await db('media_tag_assignment').insert(tag_ids.map(({id}) => ({media_id: file_id, tag_id: id})))
-
-            return tags
-        } catch (error) {
-            if (error.message.includes("duplicate key value violates unique constraint")) {
-                throw new Error("Tag assignment already exists")
-            } else {
-                throw new Error(error.message)
+                await db.send(new PutItemCommand(params)) // todo: is await necessary?
             }
+
+            return filename
+
+
+        } catch (error) {
+            throw new Error(error.message)
         }
     }
 
-    /**
-     * Retrieves all the tags associated with a single filename
-     */
     async getFileTags(filename) {       
         try {
-            const tagList = await db('tag as t')
-                .select('t.name')
-                .join('media_tag_assignment as mt', 't.id', 'mt.tag_id')
-                .join('media as m', 'm.id', 'mt.media_id')
-                .where('m.filename', filename);
+            const params = {
+                TableName: process.env.AWS_DYNAMO_DB_TABLE,
+                KeyConditionExpression: "filename = :filename",
+                ExpressionAttributeValues: {
+                    ":filename": { S: filename },
+                  },
+            }
 
-            return tagList.map(tag => tag.name)
+            const data = await db.send(new QueryCommand(params));
+            return data.Items.map((item) => item.tag.S);
+
         } catch (error) {
             throw new Error(error.message)
         }
